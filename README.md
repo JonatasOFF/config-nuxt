@@ -1,4 +1,51 @@
-# chess-with-nuxt
+# config-nuxt
+This repository is create for make a config of nuxt
+
+
+
+# Config Base of Nuxt
+
+- Javascript
+- Package.json
+- Vuetify
+- Axios
+- ESlint
+- Git
+- Npm
+- SSR
+
+# Config nuxt.config.js
+
+ You need config your build, because the ESlint is accuse several errors why not To harm your code:
+
+```
+
+ build: {
+        extend(config, ctx) {
+            if (ctx.isDev && ctx.isClient) {
+                config.module.rules.push({
+
+                    enforce: 'pre',
+                    test: /\.(js|vue)$/,
+                    loader: 'eslint-loader',
+                    exclude: /(node_modules)/,
+                    options: {
+                        fix: true
+                    },
+                })
+            }
+        }
+    }
+
+```
+
+This code is make a error say Depedency of eslint-loader not found.
+For correct this error just make this in your terminal:
+
+```
+npm i --save-dev eslint-loader
+```
+
 
 ## Build Setup
 

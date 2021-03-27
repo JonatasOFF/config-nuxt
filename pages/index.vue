@@ -1,7 +1,7 @@
 <template>
   <div>
-    CHUPA MINHA PICA
-    <h1>{{ post }}</h1>
+    Escolhe uma das tab em cima please...
+    (não consigo mudar sozinho (mo preguiça))
   </div>
 </template>
 

@@ -16,7 +16,7 @@
 
     <v-main>
       <v-container
-        class="d-flex align-center justify-space-between mt-10 mb-10"
+        class="d-flex align-center justify-space-between"
         fluid
       >
         <v-row align="center" justify="center">
@@ -34,3 +34,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+html {
+    overflow: hidden;
+    /* Hide scrollbars */
+}
+</style>

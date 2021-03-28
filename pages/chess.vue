@@ -1,7 +1,16 @@
 <template>
-  <v-container class="change-scale" fill-height>
-    <v-row white align="center" justify="center">
-      <v-container fluid dark class="elevation-10 v-row-adjust">
+  <v-container
+    :class="{
+      'change-scale-sm': windowSize.y <= 929,
+      'change-scale': windowSize.y >= 929,
+    }"
+  >
+    <v-row v-resize="onResize" white align="start" justify="start">
+      <v-container
+        fluid
+        dark
+        class="elevation-10 v-row-adjust pt-9 shadow-container"
+      >
         <v-row
           v-for="(letter, n) in letters"
           :key="n - 1"
@@ -29,8 +38,15 @@
               <span
                 :style="`${isWhite(n, r) ? 'color: black;' : 'color: white '} `"
               >
-                {{ letters[r - 1] }}
-                {{ 8 - n }}
+                <House
+                  :ref="letters[r - 1] + (8 - n)"
+                  :coord-pierce="letters[r - 1] + (8 - n)"
+                  :pierce-init="spawnPierce(n, r)"
+                  @removePierceFromHouseController="
+                    removePierceFromHouseController
+                  "
+                  @showHouseOptions="showHouseOptions"
+                />
               </span>
             </v-row>
           </v-card>
@@ -54,11 +70,32 @@
 </template>
 
 <script>
+import House from '~/components/House'
+
 export default {
+  components: {
+    House
+  },
   data () {
     return {
-      letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+      letters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+      windowSize: {},
+      configFENJhone: [
+        ['r', 'p', '', '', '', '', 'P', 'R'],
+        ['n', 'p', '', '', '', '', 'P', 'N'],
+        ['b', 'p', '', '', '', '', 'P', 'B'],
+        ['q', 'p', '', '', '', '', 'P', 'Q'],
+        ['k', 'p', '', '', '', '', 'P', 'K'],
+        ['b', 'p', '', '', '', '', 'P', 'B'],
+        ['n', 'p', '', '', '', '', 'P', 'N'],
+        ['r', 'p', '', '', '', '', 'P', 'R']
+      ],
+      pierceToDelete: ''
     }
+  },
+  mounted () {
+    this.onResize()
+    console.log(this.$refs)
   },
 
   methods: {
@@ -68,6 +105,34 @@ export default {
 
     isWhite (n, r) {
       return (8 - n) % 2 === 0 ? r % 2 !== 0 : r % 2 === 0
+    },
+    onResize () {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+    },
+    spawnPierce (n, r) {
+      return this.configFENJhone[r - 1][n]
+    },
+
+    /** *AVISO IMPORTANTISSIMO*
+     * DEPOIS APAGAR TUDO TUDO TUDO TUDO, TODA A LOGICA (menos do PAWN) de resto TUDO DEVERA SER APAGADO (METHODS DO hOUSE)
+     *
+     * isso se você quiser continuar com o projeto claro...
+     */
+
+    removePierceFromHouseController () {
+      this.$refs[this.pierceToDelete][0].removePierce()
+      this.pierceToDelete = ''
+      this.removeAllShows()
+    },
+
+    removeAllShows () {
+      Object.keys(this.$refs).forEach((k) => {
+        this.$refs[k][0].cancelGoToHouse()
+      })
+    },
+    showHouseOptions ({ houses, caseGo }) {
+      this.pierceToDelete = caseGo
+      this.$refs[houses][0].cantGoToHouse('P')
     }
   }
 }
@@ -84,8 +149,16 @@ export default {
   min-width: 100px !important;
 }
 //Depois adiciona aqui a logica para ele mudar a porra do scale jonatas
+.change-scale-sm {
+  scale: 0.69;
+  margin-top: -110px;
+}
 .change-scale {
   scale: 0.9;
+}
 
+.shadow-container {
+  box-shadow: 0px 6px 6px -3px rgb(255, 11, 11),
+    0px 10px 14px 1px rgb(255, 0, 0), 0px 4px 18px 3px rgb(238, 4, 4) !important;
 }
 </style>

@@ -1,6 +1,3 @@
-
-# TEM QUE BOTAR UM PADDING-TOP NO ELEVATION LÁ (E COLOCAR O SHADOW (NOCTURE) COMO VERMELHO FICA BONITO *-*)
-
 # config-nuxt
 This repository is create for make a config of nuxt
 

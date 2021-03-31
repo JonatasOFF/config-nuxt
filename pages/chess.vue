@@ -40,12 +40,10 @@
               >
                 <House
                   :ref="letters[r - 1] + (8 - n)"
-                  :coord-pierce="letters[r - 1] + (8 - n)"
+                  :coord-house="letters[r - 1] + (8 - n)"
                   :pierce-init="spawnPierce(n, r)"
-                  @removePierceFromHouseController="
-                    removePierceFromHouseController
-                  "
-                  @showHouseOptions="showHouseOptions"
+                  @possiblesHousesGo="possiblesHousesGo"
+                  @removePossiblesHousesGo="removePossiblesHousesGo"
                 />
               </span>
             </v-row>
@@ -90,7 +88,7 @@ export default {
         ['n', 'p', '', '', '', '', 'P', 'N'],
         ['r', 'p', '', '', '', '', 'P', 'R']
       ],
-      pierceToDelete: ''
+      housesPossibleActive: []
     }
   },
   mounted () {
@@ -112,27 +110,17 @@ export default {
     spawnPierce (n, r) {
       return this.configFENJhone[r - 1][n]
     },
-
-    /** *AVISO IMPORTANTISSIMO*
-     * DEPOIS APAGAR TUDO TUDO TUDO TUDO, TODA A LOGICA (menos do PAWN) de resto TUDO DEVERA SER APAGADO (METHODS DO hOUSE)
-     *
-     * isso se você quiser continuar com o projeto claro...
-     */
-
-    removePierceFromHouseController () {
-      this.$refs[this.pierceToDelete][0].removePierce()
-      this.pierceToDelete = ''
-      this.removeAllShows()
+    possiblesHousesGo (idHouse) {
+      const house = this.$refs[idHouse][0]
+      house.setIsPossibleCome(true)
+      this.housesPossibleActive.push(house)
     },
 
-    removeAllShows () {
-      Object.keys(this.$refs).forEach((k) => {
-        this.$refs[k][0].cancelGoToHouse()
+    removePossiblesHousesGo () {
+      this.housesPossibleActive.forEach((house) => {
+        house.setIsPossibleCome(false)
       })
-    },
-    showHouseOptions ({ houses, caseGo }) {
-      this.pierceToDelete = caseGo
-      this.$refs[houses][0].cantGoToHouse('P')
+      this.housesPossibleActive = []
     }
   }
 }

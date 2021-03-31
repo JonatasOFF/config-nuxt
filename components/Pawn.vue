@@ -16,6 +16,7 @@ export default {
   },
 
   mounted () {
+    // Diz as coordenada da peça em questão
     const coordenadas = this.coordPierce.split('')
     if (
       parseInt((coordenadas[1], 10) !== 2 && this.isBlack) ||
@@ -28,6 +29,7 @@ export default {
   methods: {
     possibleHouses () {
       const coordenadas = this.coordPierce.split('')
+      this.$emit('removePossibleHouses')
       console.log(this.isBlack)
       if (this.isBlack) {
         for (
@@ -36,11 +38,8 @@ export default {
           i++
         ) {
           console.log(this.limitHouse)
-          const coordGo = coordenadas[0] + i
-          this.$emit('houseNow', {
-            houses: coordGo
-
-          })
+          const possibleHouse = coordenadas[0] + i
+          this.$emit('possibleHouses', possibleHouse)
         }
       } else {
         for (
@@ -49,8 +48,8 @@ export default {
           i--
         ) {
           console.log(this.limitHouse)
-          const coordGo = coordenadas[0] + i
-          this.$emit('houseNow', coordGo, 'p')
+          const possibleHouse = coordenadas[0] + i
+          this.$emit('possibleHouses', possibleHouse)
         }
       }
     }

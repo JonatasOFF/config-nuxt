@@ -4,38 +4,39 @@
       <Pawn
         v-if="pierce === 'p' || pierce === 'P'"
         :is-black="pierce === 'P'"
-        :coord-pierce="coordPierce"
-        @houseNow="houseNow"
+        :coord-pierce="coordHouse"
+        @possibleHouses="possibleHouses"
+        @removePossibleHouses="removePossibleHouses"
       />
       <Tower
         v-if="pierce === 'r' || pierce === 'R'"
         :is-black="pierce === 'R'"
-        :coord-pierce="coordPierce"
+        :coord-pierce="coordHouse"
       />
       <Bisp
         v-if="pierce === 'b' || pierce === 'B'"
         :is-black="pierce === 'B'"
-        :coord-pierce="coordPierce"
+        :coord-pierce="coordHouse"
       />
       <King
         v-if="pierce === 'k' || pierce === 'K'"
         :is-black="pierce === 'K'"
-        :coord-pierce="coordPierce"
+        :coord-pierce="coordHouse"
       />
       <Queen
         v-if="pierce === 'q' || pierce === 'Q'"
         :is-black="pierce === 'Q'"
-        :coord-pierce="coordPierce"
+        :coord-pierce="coordHouse"
       />
       <Knight
         v-if="pierce === 'n' || pierce === 'N'"
         :is-black="pierce === 'N'"
-        :coord-pierce="coordPierce"
+        :coord-pierce="coordHouse"
       />
     </span>
     <span
-      v-if="pierceCan === 'm' && pierce === ''"
-    ><div class="come-on" @click="movement" />
+      v-if="isPossibleCome && pierce === ''"
+    ><div class="come-on" />
       <span />
     </span>
   </v-row>
@@ -58,40 +59,20 @@ export default {
     Knight,
     Tower
   },
-  props: { coordPierce: String, pierceInit: String, isWhite: Boolean },
+  props: { coordHouse: String, pierceInit: String, isWhite: Boolean },
   data () {
     return {
-      pierceCan: '',
-      pierce: '',
-      pierceCanGo: ''
+      isPossibleCome: false,
+      pierce: ''
     }
   },
   mounted () {
-    console.log(this.pierceInit)
     this.pierce = this.pierceInit
   },
 
   methods: {
-    cantGoToHouse (pierce) {
-      this.pierceCan = 'm'
-      this.pierceCanGo = pierce
-      return this
-    },
-    cancelGoToHouse () {
-      this.pierceCan = ''
-    },
-
-    houseNow ({ houses }) {
-      this.$emit('showHouseOptions', { houses, caseGo: this.$vnode.data.ref })
-    },
-
-    movement () {
-      console.log(this.pierceCanGo)
-      console.log(this.$vnode.data.ref)
-      this.changePierce(this.pierceCanGo)
-      this.pierceCan = ''
-      this.pierceCanGo = ''
-      this.$emit('removePierceFromHouseController')
+    setIsPossibleCome (isCan) {
+      this.isPossibleCome = isCan
     },
 
     removePierce () {
@@ -101,6 +82,18 @@ export default {
     changePierce (p) {
       this.pierce = p
       console.log(this.pierce)
+    },
+    /**
+     * communication function for the controller chess.vue
+     * s
+     * parameters: idHouse get the house for the controller
+     */
+    possibleHouses (idHouse) {
+      this.$emit('possiblesHousesGo', idHouse)
+    },
+    removePossibleHouses () {
+      console.log('ELE TA CHEGANDO AQUI CARALHO JÁ VAISEI')
+      this.$emit('removePossiblesHousesGo')
     }
   }
 }

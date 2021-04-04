@@ -5,8 +5,6 @@
         v-if="pierce === 'p' || pierce === 'P'"
         :is-black="pierce === 'P'"
         :coord-pierce="coordHouse"
-        @possibleHouses="possibleHouses"
-        @removePossibleHouses="removePossibleHouses"
       />
       <Tower
         v-if="pierce === 'r' || pierce === 'R'"
@@ -43,6 +41,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import Pawn from '~/components/Pawn'
 import Bisp from '~/components/Bisp'
 import King from '~/components/King'
@@ -71,7 +70,11 @@ export default {
   },
 
   methods: {
+    ...mapMutations('chess', ['putHousesActive']),
     setIsPossibleCome (isCan) {
+      if (isCan) {
+        this.putHousesActive(this)
+      }
       this.isPossibleCome = isCan
     },
 
@@ -82,19 +85,8 @@ export default {
     changePierce (p) {
       this.pierce = p
       console.log(this.pierce)
-    },
-    /**
-     * communication function for the controller chess.vue
-     * s
-     * parameters: idHouse get the house for the controller
-     */
-    possibleHouses (idHouse) {
-      this.$emit('possiblesHousesGo', idHouse)
-    },
-    removePossibleHouses () {
-      console.log('ELE TA CHEGANDO AQUI CARALHO JÁ VAISEI')
-      this.$emit('removePossiblesHousesGo')
     }
+
   }
 }
 </script>

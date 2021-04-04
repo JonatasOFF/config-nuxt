@@ -42,9 +42,8 @@
                   :ref="letters[r - 1] + (8 - n)"
                   :coord-house="letters[r - 1] + (8 - n)"
                   :pierce-init="spawnPierce(n, r)"
-                  @possiblesHousesGo="possiblesHousesGo"
-                  @removePossiblesHousesGo="removePossiblesHousesGo"
                 />
+
               </span>
             </v-row>
           </v-card>
@@ -52,6 +51,7 @@
 
         <v-row align-content="center">
           <v-spacer />
+
           <v-col
             v-for="letter in letters"
             :key="letter"
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import House from '~/components/House'
 
 export default {
@@ -93,10 +94,12 @@ export default {
   },
   mounted () {
     this.onResize()
-    console.log(this.$refs)
+
+    this.setRefsHouse(this.$refs)
   },
 
   methods: {
+    ...mapActions('chess', ['setRefsHouse']),
     isBlack (n, r) {
       return (8 - n) % 2 === 0 ? r % 2 === 0 : r % 2 !== 0
     },
@@ -109,19 +112,8 @@ export default {
     },
     spawnPierce (n, r) {
       return this.configFENJhone[r - 1][n]
-    },
-    possiblesHousesGo (idHouse) {
-      const house = this.$refs[idHouse][0]
-      house.setIsPossibleCome(true)
-      this.housesPossibleActive.push(house)
-    },
-
-    removePossiblesHousesGo () {
-      this.housesPossibleActive.forEach((house) => {
-        house.setIsPossibleCome(false)
-      })
-      this.housesPossibleActive = []
     }
+
   }
 }
 </script>

@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
   props: { isBlack: Boolean, coordPierce: String },
 
@@ -22,24 +24,28 @@ export default {
       parseInt((coordenadas[1], 10) !== 2 && this.isBlack) ||
       (parseInt(coordenadas[1], 10) !== 7 && !this.isBlack)
     ) {
+      console.log('o que')
       this.limitHouse = 1
     }
   },
 
   methods: {
+    ...mapMutations('chess', ['putHousesActive']),
     possibleHouses () {
       const coordenadas = this.coordPierce.split('')
-      this.$emit('removePossibleHouses')
-      console.log(this.isBlack)
+      this.putHousesActive()
+
       if (this.isBlack) {
         for (
           let i = parseInt(coordenadas[1], 10);
           i <= parseInt(coordenadas[1], 10) + this.limitHouse;
           i++
         ) {
-          console.log(this.limitHouse)
           const possibleHouse = coordenadas[0] + i
-          this.$emit('possibleHouses', possibleHouse)
+
+          this.$store.state.chess.listRefs[possibleHouse].setIsPossibleCome(
+            true
+          )
         }
       } else {
         for (
@@ -47,13 +53,15 @@ export default {
           i >= parseInt(coordenadas[1], 10) - this.limitHouse;
           i--
         ) {
-          console.log(this.limitHouse)
           const possibleHouse = coordenadas[0] + i
-          this.$emit('possibleHouses', possibleHouse)
+          this.$store.state.chess.listRefs[possibleHouse].setIsPossibleCome(
+            true
+          )
         }
       }
     }
-  }
+  },
+  computed: {}
 }
 </script>
 

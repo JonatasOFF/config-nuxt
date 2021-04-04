@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   props: { isBlack: Boolean, coordPierce: String },
@@ -24,7 +24,6 @@ export default {
       parseInt((coordenadas[1], 10) !== 2 && this.isBlack) ||
       (parseInt(coordenadas[1], 10) !== 7 && !this.isBlack)
     ) {
-      console.log('o que')
       this.limitHouse = 1
     }
   },
@@ -43,7 +42,7 @@ export default {
         ) {
           const possibleHouse = coordenadas[0] + i
 
-          this.$store.state.chess.listRefs[possibleHouse].setIsPossibleCome(
+          this.getRefs[possibleHouse].setIsPossibleCome(
             true
           )
         }
@@ -54,14 +53,16 @@ export default {
           i--
         ) {
           const possibleHouse = coordenadas[0] + i
-          this.$store.state.chess.listRefs[possibleHouse].setIsPossibleCome(
+          this.getRefs[possibleHouse].setIsPossibleCome(
             true
           )
         }
       }
     }
   },
-  computed: {}
+  computed: {
+    ...mapGetters('chess', ['getRefs'])
+  }
 }
 </script>
 

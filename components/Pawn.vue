@@ -20,9 +20,10 @@ export default {
   mounted () {
     // Diz as coordenada da peça em questão
     const coordenadas = this.coordPierce.split('')
+
     if (
-      parseInt((coordenadas[1], 10) !== 2 && this.isBlack) ||
-      (parseInt(coordenadas[1], 10) !== 7 && !this.isBlack)
+      parseInt(coordenadas[1], 10) !== 2 &&
+      parseInt(coordenadas[1], 10) !== 7
     ) {
       this.limitHouse = 1
     }
@@ -43,7 +44,9 @@ export default {
           const possibleHouse = coordenadas[0] + i
 
           this.getRefs[possibleHouse].setIsPossibleCome(
-            true
+            true,
+            'P',
+            this.coordPierce
           )
         }
       } else {
@@ -54,7 +57,9 @@ export default {
         ) {
           const possibleHouse = coordenadas[0] + i
           this.getRefs[possibleHouse].setIsPossibleCome(
-            true
+            true,
+            'p',
+            this.coordPierce
           )
         }
       }

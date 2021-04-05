@@ -13,7 +13,7 @@ export default {
     }
     if (payload === undefined) {
       state.listHouse.forEach((element) => {
-        element.setIsPossibleCome(false)
+        element.setIsPossibleCome(false, '')
       })
       state.listHouse = []
     } else {

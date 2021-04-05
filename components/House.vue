@@ -34,14 +34,14 @@
     </span>
     <span
       v-if="isPossibleCome && pierce === ''"
-    ><div class="come-on" />
+    ><div class="come-on" @click="setPierceNew" />
       <span />
     </span>
   </v-row>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import Pawn from '~/components/Pawn'
 import Bisp from '~/components/Bisp'
 import King from '~/components/King'
@@ -62,7 +62,9 @@ export default {
   data () {
     return {
       isPossibleCome: false,
-      pierce: ''
+      pierce: '',
+      pierceCanGo: '',
+      coordDelete: ''
     }
   },
   mounted () {
@@ -71,11 +73,22 @@ export default {
 
   methods: {
     ...mapMutations('chess', ['putHousesActive']),
-    setIsPossibleCome (isCan) {
+    setIsPossibleCome (isCan, pierceCanGo, coordDelete) {
       if (isCan) {
         this.putHousesActive(this)
       }
+      this.pierceCanGo = pierceCanGo
       this.isPossibleCome = isCan
+
+      this.coordDelete = coordDelete
+    },
+
+    setPierceNew () {
+      this.pierce = this.pierceCanGo
+      this.getRefs[this.coordDelete].removePierce()
+      this.putHousesActive()
+
+      this.coordDelete = ''
     },
 
     removePierce () {
@@ -86,7 +99,10 @@ export default {
       this.pierce = p
       console.log(this.pierce)
     }
+  },
 
+  computed: {
+    ...mapGetters('chess', ['getRefs'])
   }
 }
 </script>

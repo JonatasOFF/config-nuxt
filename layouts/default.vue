@@ -8,8 +8,12 @@
 
       <template #extension>
         <v-tabs>
-          <v-tab>Tabela do Alan</v-tab>
-          <v-tab>Xadrez do Jonatas</v-tab>
+          <v-tab to="/chess">
+            Tabela do Alan
+          </v-tab>
+          <v-tab to="/chess">
+            Xadrez do Jonatas
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
